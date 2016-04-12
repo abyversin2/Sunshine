@@ -1,6 +1,5 @@
 package com.example.android.sunshine.app;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
@@ -18,19 +17,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
- * Created by albertv on 4/9/2016.
+ * Created by Albertv on 4/12/2016.
  */
-public class ExternalServer extends AsyncTask<String, Void, String[]>{
 
-    private Context context;
+public class ExternalServer extends AsyncTask<String, Void, String[]> {
 
-    public ExternalServer(Context context){
-        this.context = context;
+    private ArrayAdapter<String> arrayAdapter;
+
+    public ExternalServer(ArrayAdapter<String> arrayAdapter){
+        this.arrayAdapter = arrayAdapter;
     }
 
     @Override
@@ -92,7 +89,10 @@ public class ExternalServer extends AsyncTask<String, Void, String[]>{
     @Override
     protected void onPostExecute(String[] results){
         if(results != null){
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.context, R.layout.list_item_forecast, R.id.list_item_forecast_textview, Arrays.asList(results));
+            arrayAdapter.clear();
+            for (String value : results){
+                arrayAdapter.add(value);
+            }
         }
     }
 
@@ -157,3 +157,4 @@ public class ExternalServer extends AsyncTask<String, Void, String[]>{
         return "max. temp. " + roundedHigh + " / " + "min. temp. " + roundedLow;
     }
 }
+

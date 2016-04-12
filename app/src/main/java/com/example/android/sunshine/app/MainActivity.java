@@ -1,31 +1,11 @@
 package com.example.android.sunshine.app;
 
-import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.Time;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,13 +24,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void refreshButtonHandler(View view) throws ExecutionException, InterruptedException {
-        new ExternalServer().execute("Timisoara");
+        new ExternalServer(arrayAdapter).execute("Timisoara");
     }
 
 
 
 
-    public class ExternalServer extends AsyncTask<String, Void, String[]> {
+    /*public class ExternalServer extends AsyncTask<String, Void, String[]> {
 
         @Override
         protected String[] doInBackground(String... params) {
@@ -179,6 +159,6 @@ public class MainActivity extends AppCompatActivity {
             return "max. temp. " + roundedHigh + " / " + "min. temp. " + roundedLow;
         }
     }
-
+*/
 
 }
