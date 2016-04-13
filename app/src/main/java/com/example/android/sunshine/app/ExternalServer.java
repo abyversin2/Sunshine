@@ -136,7 +136,7 @@ public class ExternalServer extends AsyncTask<String, Void, String[]> {
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
         } catch (JSONException e) {
-            Log.e("as", "Parse error ", e);
+            Log.e("ExternalServer", "Parse error ", e);
         }
 
 //        for (String s : resultStrs) {

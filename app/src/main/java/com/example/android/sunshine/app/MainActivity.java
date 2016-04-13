@@ -1,8 +1,10 @@
 package com.example.android.sunshine.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -17,9 +19,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         arrayAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.list_item_forecast, R.id.list_item_forecast_textview);
-        ListView listViewForecast = (ListView) findViewById(R.id.listview_forecast);
+        final ListView listViewForecast = (ListView) findViewById(R.id.listview_forecast);
         if (listViewForecast != null) {
             listViewForecast.setAdapter(arrayAdapter);
+            listViewForecast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String itemText = arrayAdapter.getItem(position);
+                    startActivity(new Intent(getApplicationContext(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, itemText));
+                }
+            });
         }
     }
 

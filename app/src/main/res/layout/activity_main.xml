@@ -13,10 +13,11 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Actualizeaza vremea Timisoara"
+        android:text="@string/actualizeaza_vremea_timisoara"
         android:id="@+id/button"
         android:layout_gravity="left|top"
-        android:onClick="refreshButtonHandler"/>
+        android:onClick="refreshButtonHandler">
+    </Button>
 
     <ListView
         android:id="@+id/listview_forecast"
