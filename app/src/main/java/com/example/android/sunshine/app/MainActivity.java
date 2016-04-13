@@ -1,12 +1,13 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -67,12 +68,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
@@ -85,20 +80,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Actualizare...", "Schimba oras", "Ha ha HA", "Bla bla bla"};
+        String[] osArray = { "Actualizare...", "Schimba oras", "Ha ha HA", "Bla bla bla", "Schimba oras",
+                "Ha ha HA", "Bla bla bla", "Schimba oras", "Ha ha HA", "Bla bla bla", "Schimba oras",
+                "Ha ha HA", "Bla bla bla", "Schimba oras", "Ha ha HA", "Bla bla bla", "Schimba oras",
+                "Ha ha HA", "Bla bla bla", "Schimba oras", "Ha ha HA", "Bla bla bla", "Schimba oras",
+                "Ha ha HA", "Bla bla bla"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0){
-                    new ExternalServer(arrayAdapter).execute("Timisoara");
-                }else {
-                    Toast.makeText(MainActivity.this, "Ai apasat " + mAdapter.getItem(position), Toast.LENGTH_SHORT).show();
+                switch (position){
+                    case 0:
+                        new ExternalServer(arrayAdapter).execute("Timisoara");
+                        break;
+                    case 1:
+                        new ExternalServer(arrayAdapter).execute(getLocation());
                 }
+                Toast.makeText(MainActivity.this, "Ai apasat " + mAdapter.getItem(position), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private String getLocation(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
     }
 
     private void setupDrawer() {
