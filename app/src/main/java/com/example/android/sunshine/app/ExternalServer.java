@@ -138,12 +138,7 @@ public class ExternalServer extends AsyncTask<String, Void, String[]> {
         } catch (JSONException e) {
             Log.e("ExternalServer", "Parse error ", e);
         }
-
-//        for (String s : resultStrs) {
-//            Log.e("as", "Forecast entry: " + s);
-//        }
         return resultStrs;
-
     }
 
     private String getReadableDateString(long time){
