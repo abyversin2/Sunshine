@@ -104,6 +104,7 @@ public class ExternalServer extends AsyncTask<String, Void, String[]> {
         final String OWM_MAX = "max";
         final String OWM_MIN = "min";
         final String OWM_DESCRIPTION = "main";
+        final String OWM_CITY = "city";
 
         JSONObject forecastJson = null;
         String[] resultStrs = new String[numDays];
@@ -111,6 +112,8 @@ public class ExternalServer extends AsyncTask<String, Void, String[]> {
             forecastJson = new JSONObject(forecastJsonStr);
             JSONArray weatherArray = null;
             weatherArray = forecastJson.getJSONArray(OWM_LIST);
+
+            JSONObject city = forecastJson.getJSONObject(OWM_CITY);
 
             Time dayTime = new Time();
             dayTime.setToNow();
@@ -133,7 +136,7 @@ public class ExternalServer extends AsyncTask<String, Void, String[]> {
                 double low = temperatureObject.getDouble(OWM_MIN);
 
                 highAndLow = formatHighLows(high, low);
-                resultStrs[i] = day + " - " + description + " - " + highAndLow;
+                resultStrs[i] = city.getString("name") + " - " + day + " - " + description + " - " + highAndLow;
             }
         } catch (JSONException e) {
             Log.e("ExternalServer", "Parse error ", e);

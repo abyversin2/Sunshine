@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
+    private String mActivityTitle = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +42,23 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerList = (ListView)findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = "Timisoara";
-        getSupportActionBar().setTitle(mActivityTitle);
 
         addDrawerItems();
         setupDrawer();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
+    }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(mActivityTitle.equals("") ? getLocation() : mActivityTitle);
+        }
+        new ExternalServer(arrayAdapter).execute(getLocation());
     }
 
     @Override
@@ -80,11 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Actualizare...", "Schimba oras", "Ha ha HA", "Bla bla bla", "Schimba oras",
-                "Ha ha HA", "Bla bla bla", "Schimba oras", "Ha ha HA", "Bla bla bla", "Schimba oras",
-                "Ha ha HA", "Bla bla bla", "Schimba oras", "Ha ha HA", "Bla bla bla", "Schimba oras",
-                "Ha ha HA", "Bla bla bla", "Schimba oras", "Ha ha HA", "Bla bla bla", "Schimba oras",
-                "Ha ha HA", "Bla bla bla"};
+        String[] osArray = { "Actualizare...", "Vremea Timisoara", "Vremea Bucuresti", "Setari"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -93,12 +95,20 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        new ExternalServer(arrayAdapter).execute("Timisoara");
+                        new ExternalServer(arrayAdapter).execute(getLocation());
                         break;
                     case 1:
-                        new ExternalServer(arrayAdapter).execute(getLocation());
+                        new ExternalServer(arrayAdapter).execute("Timisoara");
+                        mActivityTitle = "Timisoara";
+                        break;
+                    case 2:
+                        new ExternalServer(arrayAdapter).execute("Bucuresti");
+                        mActivityTitle = "Bucuresti";
+                        break;
+                    case 3:
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                        break;
                 }
-                Toast.makeText(MainActivity.this, "Ai apasat " + mAdapter.getItem(position), Toast.LENGTH_SHORT).show();
             }
         });
     }
