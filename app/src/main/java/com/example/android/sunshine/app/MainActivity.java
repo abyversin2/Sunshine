@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(mActivityTitle.equals("") ? getLocation() : mActivityTitle);
+            getSupportActionBar().setTitle(mDrawerLayout.isDrawerOpen(GravityCompat.START) ? "Meniu" : getLocation());
         }
         new ExternalServer(arrayAdapter).execute(getLocation());
     }
@@ -81,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Actualizare...", "Vremea Timisoara", "Vremea Bucuresti", "Locatie pe harta", "Setari"};
-        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
+        String[] elements = { "Actualizare...", "Vremea Timisoara", "Vremea Bucuresti", "Locatie pe harta", "Setari"};
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, elements);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 if(getSupportActionBar() != null) {
-                    getSupportActionBar().setTitle(mActivityTitle.equals("") ? getLocation() : mActivityTitle);
+                    getSupportActionBar().setTitle(getLocation());
                 }
                 invalidateOptionsMenu();
             }
