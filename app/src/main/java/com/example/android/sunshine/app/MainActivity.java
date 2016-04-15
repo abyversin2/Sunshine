@@ -3,6 +3,7 @@ package com.example.android.sunshine.app;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -76,18 +77,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Actualizare...", "Vremea Timisoara", "Vremea Bucuresti", "Setari"};
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        String[] osArray = { "Actualizare...", "Vremea Timisoara", "Vremea Bucuresti", "Locatie pe harta", "Setari"};
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -108,6 +103,16 @@ public class MainActivity extends AppCompatActivity {
                         setLocation(mActivityTitle);
                         break;
                     case 3:
+                        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+                                .appendQueryParameter("q", getLocation())
+                                .build();
+                        Intent googleMapsIntent = new Intent(Intent.ACTION_VIEW);
+                        googleMapsIntent.setData(geoLocation);
+                        if (googleMapsIntent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(googleMapsIntent);
+                        }
+                        break;
+                    case 4:
                         startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                         break;
                 }
@@ -133,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 if(getSupportActionBar() != null) {
-                    getSupportActionBar().setTitle("Setari");
+                    getSupportActionBar().setTitle("Meniu");
                 }
                 invalidateOptionsMenu();
             }
