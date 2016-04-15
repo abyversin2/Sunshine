@@ -100,10 +100,12 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         new ExternalServer(arrayAdapter).execute("Timisoara");
                         mActivityTitle = "Timisoara";
+                        setLocation(mActivityTitle);
                         break;
                     case 2:
                         new ExternalServer(arrayAdapter).execute("Bucuresti");
                         mActivityTitle = "Bucuresti";
+                        setLocation(mActivityTitle);
                         break;
                     case 3:
                         startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
@@ -118,18 +120,29 @@ public class MainActivity extends AppCompatActivity {
         return prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
     }
 
+    private void setLocation(String location){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("location", location);
+        editor.apply();
+    }
+
     private void setupDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Setari");
+                if(getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle("Setari");
+                }
                 invalidateOptionsMenu();
             }
 
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mActivityTitle);
+                if(getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(mActivityTitle.equals("") ? getLocation() : mActivityTitle);
+                }
                 invalidateOptionsMenu();
             }
         };
